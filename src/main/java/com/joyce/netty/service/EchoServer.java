@@ -26,9 +26,10 @@ public class EchoServer {
 
   public void start() throws Exception {
     NioEventLoopGroup group = new NioEventLoopGroup();
+    NioEventLoopGroup workGroup = new NioEventLoopGroup();
     try {
       ServerBootstrap b = new ServerBootstrap();
-      b.group(group)
+      b.group(group,workGroup)
           // 指定使用 NIO 的传输 Channel
           .channel(NioServerSocketChannel.class)
           // 设置 socket 地址使用所选的端口
@@ -47,6 +48,7 @@ public class EchoServer {
       f.channel().closeFuture().sync();
     } finally {
       group.shutdownGracefully().sync();
+      workGroup.shutdownGracefully().sync();
     }
   }
 
